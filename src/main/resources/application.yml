@@ -1,0 +1,49 @@
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  servlet:
+    multipart:
+      max-file-size: 250GB
+      max-request-size: 250GB
+
+
+  h2:
+    console:
+      enabled: true
+      
+#  datasource:
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://182.162.91.68:1433;instanceName=HJW
+#    username: sa
+#    password: 2017hyunjin81)(*
+#    
+
+
+
+mybatis:
+  type-aliases-package:  com.hyunjin.web.dto
+  mapper-locations: classpath:/mapper/*.xml
+  
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+
+server:
+  servlet:
+    context-path: /
+    encoding : 
+      charset : UTF-8
+      force : true
+#  port: 8081
+
+pagehelper:
+ helper-dialect: sqlserver
+ reasonable: true
+ support-methods-arguments: true
+
+
+
+
+
