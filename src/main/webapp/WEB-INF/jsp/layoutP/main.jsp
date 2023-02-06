@@ -71,14 +71,14 @@ body{
 
 
 			<div id="main" class="main">
-				 <header id="header" class="main shadow-sm ">
+				<%--  <header id="header" class="main shadow-sm ">
 					<jsp:include page="header.jsp" />
-				</header>
+				</header> --%>
 
-				<div id="sidebar" class="shadow-sm">
+			<%-- 	<div id="sidebar" class="shadow-sm">
 					<jsp:include page="sidebar.jsp" />
 				</div>
-
+ --%>
 				<div id="content" class="main px-5" style="margin-top:10px;">
 					<%-- <jsp:include page="<%=contentPage%>" /> --%>
 
