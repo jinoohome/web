@@ -43,12 +43,39 @@ $('#file').on('click change','.change, .click',function(e){
 
 	}else if(e.type=='change'){
 		if($(this).hasClass('fileUpload')){
-			F.fileUplad();
+			F.fileUpload();
 		}
 	}
 });
 
 
+const fileUpload = () => {
 
+	let formData = new FormData();
+	let files = $("input[name=files]")[0].files;
+
+	$(files).each(function(i,e){
+		formData.append('files' , files[i]);
+	});
+
+	   $.ajax({
+		        type : "post",
+		        url : "upload",
+		        dataType : 'json',
+		        enctype: 'multipart/form-data', // 필수
+		        processData: false, // 필수
+				contentType: false, // 필수
+				cache: false,
+		        data: formData,
+		        success        :    function(e){
+		        	data = e ;
+		        }
+				, beforeSend: function() {
+			    },
+			    complete:function(){
+			    }
+		 });
+
+}
 </script>
 </html>

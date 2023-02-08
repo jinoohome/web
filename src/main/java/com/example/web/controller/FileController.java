@@ -22,7 +22,7 @@ public class FileController {
 	}
 
 	@PostMapping("/upload")
-	public @ResponseBody void upload(@RequestParam("file") MultipartFile mFile,  HttpServletResponse response) throws Exception {
+	public @ResponseBody void upload(@RequestParam("files") MultipartFile mFile,  HttpServletResponse response) throws Exception {
 
 		String fileSeparator = File.separator;
 		String rootPath = System.getProperty("user.dir");
