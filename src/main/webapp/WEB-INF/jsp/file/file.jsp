@@ -50,7 +50,7 @@ $('#file').on('click change','.change, .click',function(e){
 
 
 const fileUpload = () => {
-
+ㅣ
 	let formData = new FormData();
 	let files = $("input[name=files]")[0].files;
 
@@ -73,9 +73,61 @@ const fileUpload = () => {
 				, beforeSend: function() {
 			    },
 			    complete:function(){
+			    	fileSizeDown(data);
 			    }
 		 });
 
 }
+
+var fileSizeDown = function(data){
+
+		var fileChk = document.getElementById("clientFile").files.length;
+
+	   	var flag = true;
+	   	var result = '';
+
+	   	let files = {};
+	   	files.data = data;
+
+		if(flag){
+
+
+			 	var formData = new FormData();
+				formData.delete('status');
+				formData.append("status" , "I");
+				let files = $("input[name=files]")[0].files;
+
+				$(files).each(function(i,e){
+					formData.append('files' , files[i]);
+				});
+				formData.append('data',JSON.stringify(data));
+
+
+		 	     $.ajax({
+			        type : "post",
+			        url : "fileSizeDown",
+			        dataType : 'json',
+			        enctype: 'multipart/form-data', // 필수
+			        processData: false, // 필수
+					contentType: false, // 필수
+					cache: false,
+			        data: formData,
+			        success        :    function(data){
+
+			        }
+					, beforeSend: function() {
+				    },
+				    complete:function(){
+
+				    }
+				 });
+
+		 	    setTimeout(() => {refreshPage();}, "500");
+
+		}
+
+
+	}
+
 </script>
 </html>
