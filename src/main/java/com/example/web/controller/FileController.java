@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tika.Tika;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,6 +30,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import net.bramp.ffmpeg.FFmpeg;
+import net.bramp.ffmpeg.FFmpegExecutor;
+import net.bramp.ffmpeg.FFprobe;
+import net.bramp.ffmpeg.builder.FFmpegBuilder;
+
 @Controller
 public class FileController {
 
@@ -38,7 +44,7 @@ public class FileController {
 	}
 
 	@PostMapping("/upload")
-	public List<Map<String, Object>> upload(@RequestParam("files") MultipartFile mFile,  HttpServletResponse response) throws Exception {
+	public List<Map<String, Object>> upload(MultipartHttpServletRequest request) throws Exception {
 
 		Map<String, Object> map = new HashMap<>();
 		String fileSeparator = File.separator;
@@ -46,19 +52,17 @@ public class FileController {
 		String basePath = rootPath+fileSeparator+ "upload" ;//	+"\\src\\main\\resources\\static\\upload";
 		File Folder = new File(basePath);
 
-		// 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
 		if (!Folder.exists()) {
 			try{
-				Folder.mkdir(); //폴더 생성합니다.
+				Folder.mkdir();
 			}
 			catch(Exception e){
 				e.getStackTrace();
 			}
-		}else {
 		}
 
+		List<MultipartFile> fileList  = (List<MultipartFile>)request.getFiles("files");
 
-		List<MultipartFile> fileList  = (List<MultipartFile>) map.get("files");
 
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		for(MultipartFile file : fileList) {
@@ -104,6 +108,7 @@ public class FileController {
 			list.add(map);
 
 		}
+		System.out.println(list);
 
 
 		return list;
@@ -130,10 +135,9 @@ public class FileController {
 		String basePath = rootPath+fileSeparator+ "upload" ;//+"\\src\\main\\resources\\static\\upload";
 		File Folder = new File(basePath);
 
-		// 해당 디렉토리가 없을경우 디렉토리를 생성합니다.
 		if (!Folder.exists()) {
 			try{
-				Folder.mkdir(); //폴더 생성합니다.
+				Folder.mkdir();
 			}
 			catch(Exception e){
 				e.getStackTrace();
@@ -169,7 +173,7 @@ public class FileController {
 			progressMap.put("progress", "10");
 //			rpService.fspRp002U04(progressMap);
 
-			// 파일 이름 변경
+
 			String savePath = basePath + "/" + originalName;
 			String renamePath = basePath + "/" + realFilename;
 
@@ -189,22 +193,22 @@ public class FileController {
 					FFprobe ffprobe = new FFprobe("src/main/resources/ffmpeg/bin/ffprobe");
 
 					progressMap.put("progress", "40");
-					rpService.fspRp002U04(progressMap);
+					//rpService.fspRp002U04(progressMap);
 					FFmpegBuilder builder = new FFmpegBuilder()
-							.setInput(savePath) // 동영상 파일경로
-							.overrideOutputFiles(true) // 오버라이드
-							.addOutput(renamePath) // 변환 후 저장할 경로
-							.setFormat(ext) // 포맷 ( 확장자 )
-							.setVideoCodec("libx264") // 비디오 코덱
-							.disableSubtitle() // 서브타이틀 제거
-							.setAudioChannels(2) // 오디오 채널 ( 1 : 모노 , 2 : 스테레오 )
-							//	.setVideoResolution(inputImage.getWidth(), inputImage.getHeight()) // 동영상 해상도
-							.setVideoBitRate(1464800) // 비디오 비트레이트
-							.setStrict(FFmpegBuilder.Strict.EXPERIMENTAL) // ffmpeg 빌더 실행 허용
+							.setInput(savePath)
+							.overrideOutputFiles(true)
+							.addOutput(renamePath)
+							.setFormat(ext)
+							.setVideoCodec("libx264")
+							.disableSubtitle()
+							.setAudioChannels(2)
+							//	.setVideoResolution(inputImage.getWidth(), inputImage.getHeight()) // 占쏙옙占쏙옙占쏙옙 占쌔삼옙
+							.setVideoBitRate(1464800)
+							.setStrict(FFmpegBuilder.Strict.EXPERIMENTAL)
 							.done();
 
 					progressMap.put("progress", "70");
-					rpService.fspRp002U04(progressMap);
+					//rpService.fspRp002U04(progressMap);
 
 					FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
 					executor.createJob(builder).run();
@@ -215,15 +219,15 @@ public class FileController {
 //					rpService.fspRp002U04(progressMap);
 
 					InputStream inputStream = new FileInputStream(dest);
-					BufferedImage inputImage = ImageIO.read(inputStream);  // 받은 이미지 읽기
+					BufferedImage inputImage = ImageIO.read(inputStream);
 
 					Image resultingImage = inputImage.getScaledInstance(inputImage.getWidth(), inputImage.getHeight(), Image.SCALE_SMOOTH);
 					BufferedImage outputImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 					Graphics2D graphics2D = outputImage.createGraphics();
 					progressMap.put("progress", "70");
 //					rpService.fspRp002U04(progressMap);
-					graphics2D.drawImage(resultingImage, 0, 0, inputImage.getWidth(), inputImage.getHeight(), null); // 그리기
-					graphics2D.dispose(); // 자원해제
+					graphics2D.drawImage(resultingImage, 0, 0, inputImage.getWidth(), inputImage.getHeight(), null); // 占쌓몌옙占쏙옙
+					graphics2D.dispose();
 					ImageIO.write(outputImage, ext, new File(renamePath));
 
 				}
@@ -246,11 +250,11 @@ public class FileController {
 			//Files.delete(deleteFile);
 			//Files.delete(deleteFile2);
 
-			File deleteFile = new File(savePath);
-			File deleteFile2 = new File(renamePath);
-
-			deleteFile.delete();
-			deleteFile2.delete();
+//			File deleteFile = new File(savePath);
+//			File deleteFile2 = new File(renamePath);
+//
+//			deleteFile.delete();
+//			deleteFile2.delete();
 		}
 
 

@@ -9,7 +9,7 @@ public class CmController {
 	@GetMapping("/")
 	public String login() throws Exception {
 		System.out.println("main");
-		return "layoutP/main";
+		return "index";
 	}
 
 }

@@ -50,13 +50,15 @@ $('#file').on('click change','.change, .click',function(e){
 
 
 const fileUpload = () => {
-ㅣ
+
 	let formData = new FormData();
 	let files = $("input[name=files]")[0].files;
 
 	$(files).each(function(i,e){
 		formData.append('files' , files[i]);
 	});
+
+	let data ={};
 
 	   $.ajax({
 		        type : "post",
@@ -68,12 +70,13 @@ const fileUpload = () => {
 				cache: false,
 		        data: formData,
 		        success        :    function(e){
+		        	console.log(e);
 		        	data = e ;
 		        }
 				, beforeSend: function() {
 			    },
 			    complete:function(){
-			    	fileSizeDown(data);
+			    	//fileSizeDown(data);
 			    }
 		 });
 
@@ -81,7 +84,7 @@ const fileUpload = () => {
 
 var fileSizeDown = function(data){
 
-		var fileChk = document.getElementById("clientFile").files.length;
+		console.log(data);
 
 	   	var flag = true;
 	   	var result = '';
@@ -122,7 +125,6 @@ var fileSizeDown = function(data){
 				    }
 				 });
 
-		 	    setTimeout(() => {refreshPage();}, "500");
 
 		}
 
