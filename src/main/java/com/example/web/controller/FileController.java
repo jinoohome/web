@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.tika.Tika;
@@ -239,6 +238,7 @@ public class FileController {
 			progressMap.put("progress", "80");
 //			rpService.fspRp002U04(progressMap);
 
+			// 오라클서버 계정설정중
 //			cmService.saveFileServer2(renamePath);
 
 			progressMap.put("progress", "100");
