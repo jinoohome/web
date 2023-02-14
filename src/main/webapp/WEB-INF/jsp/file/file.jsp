@@ -70,13 +70,13 @@ const fileUpload = () => {
 				cache: false,
 		        data: formData,
 		        success        :    function(e){
-		        	console.log(e);
 		        	data = e ;
 		        }
-				, beforeSend: function() {
+				, beforeSend: function(e) {
+					console.log(e);
 			    },
 			    complete:function(){
-			    	//fileSizeDown(data);
+			    	fileSizeDown(data);
 			    }
 		 });
 
@@ -84,7 +84,7 @@ const fileUpload = () => {
 
 var fileSizeDown = function(data){
 
-		console.log(data);
+		console.log(JSON.stringify(data));
 
 	   	var flag = true;
 	   	var result = '';
@@ -103,6 +103,7 @@ var fileSizeDown = function(data){
 				$(files).each(function(i,e){
 					formData.append('files' , files[i]);
 				});
+
 				formData.append('data',JSON.stringify(data));
 
 

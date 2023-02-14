@@ -25,7 +25,6 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -44,6 +43,7 @@ public class FileController {
 	}
 
 	@PostMapping("/upload")
+	@ResponseBody
 	public List<Map<String, Object>> upload(MultipartHttpServletRequest request) throws Exception {
 
 		Map<String, Object> map = new HashMap<>();
@@ -108,7 +108,6 @@ public class FileController {
 			list.add(map);
 
 		}
-		System.out.println(list);
 
 
 		return list;
@@ -124,11 +123,12 @@ public class FileController {
 		map.put("empNo", session.getAttribute("empNo"));
 		map.put("files", request.getFiles("files"));
 
+		List<MultipartFile> fileList  = (List<MultipartFile>) map.get("files");
+		System.out.println(request.getParameter("data"));
 
 		JSONParser parser = new JSONParser();
 		JSONArray values = (JSONArray)parser.parse(request.getParameter("data"));
 
-		List<MultipartFile> fileList  = (List<MultipartFile>) map.get("files");
 
 		String fileSeparator = File.separator;
 		String rootPath = System.getProperty("user.dir");
