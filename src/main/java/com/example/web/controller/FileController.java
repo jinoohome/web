@@ -238,7 +238,7 @@ public class FileController {
 			progressMap.put("progress", "80");
 //			rpService.fspRp002U04(progressMap);
 
-			// 오라클서버 계정설정중
+			// 오라클서버 계정설정중 #2
 //			cmService.saveFileServer2(renamePath);
 
 			progressMap.put("progress", "100");
