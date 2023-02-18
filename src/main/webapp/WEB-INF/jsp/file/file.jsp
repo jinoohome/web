@@ -20,6 +20,11 @@
 			<input  type="file" name="files" multiple="multiple"  id="fileUpload"  class="d-none fileUpload change" />
 		</div>
 
+		<!-- 드래그인 드래그  -->
+		<div>
+
+		</div>
+
 
 	</div>
 </body>
