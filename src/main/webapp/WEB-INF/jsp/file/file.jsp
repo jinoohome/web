@@ -25,6 +25,29 @@
 
 		</div>
 
+		<div class="table-content d-flex justify-content-start ">
+			<div >
+				<div class="">
+					<table class="table table-striped " >
+						<tbody class="files">
+							<tr>
+								<td class="num">1</td>
+								<td>fileName</td>
+								<td>
+									<div><button type="button" class="mx-1 btn btn-primary p-1 clientPicViewBtn click" style="width:25px;height:25px;padding-top: 2px !important;"><i class="bi bi-search"></i></button></div>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
 
 	</div>
 </body>
