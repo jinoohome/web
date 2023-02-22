@@ -8,44 +8,50 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js/jquery-3.6.3.min.js"></script>
+<link href="https://uicdn.toast.com/grid/latest/tui-grid.css" rel="stylesheet"/>
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 
 </head>
 <body>
 	<div id="file">
-		<div>
-			<label for="fileUpload" class="btn btn-secondary p-0 py-1 px-2 me-3" style="min-width:3.8rem">파일 업로드</label>
-			<input  type="file" name="files" multiple="multiple"  id="fileUpload"  class="d-none fileUpload change" />
-		</div>
 
-		<!-- 드래그인 드래그  -->
-		<div>
+		<div class="fileWrap d-flex flex-wrap"  >
 
-		</div>
+			<section class="sliderWarp wrap"  style=" width:50%">
+				<div class="m-2">
+					<div class="d-flex justify-content-center bg-dark" style="width:100%; height:400px;">
+						<ul class="slider ">
 
-		<div class="table-content d-flex justify-content-start ">
-			<div >
-				<div class="">
-					<table class="table table-striped " >
-						<tbody class="files">
-							<tr>
-								<td class="num">1</td>
-								<td>fileName</td>
-								<td>
-									<div><button type="button" class="mx-1 btn btn-primary p-1 clientPicViewBtn click" style="width:25px;height:25px;padding-top: 2px !important;"><i class="bi bi-search"></i></button></div>
-								</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>
+					  	</ul>
+				  	</div>
+
 				</div>
-			</div>
+
+
+			</section>
+
+			<section  class="filesWrap wrap"   style=" width:50%">
+				<div class="d-flex justify-content-end my-2">
+					<div>
+						<label for="fileUpload" class="btn btn-secondary p-0 py-1 px-2 me-3" style="">파일 업로드</label>
+						<input  type="file" name="files" multiple="multiple"  id="fileUpload"  class="d-none fileUpload change" />
+					</div>
+				</div>
+
+				<!-- 드래그인 드래그  -->
+				<div>
+
+				</div>
+
+				<div id ="fileGrid">
+
+				</div>
+			</section>
+
 		</div>
 
 
@@ -55,6 +61,93 @@
 
 $(function(){
 });
+
+const param = () => {
+
+	let rowData = [
+		  {
+		    fileName: '사슴',
+		    filePath: 'Ed Sheeran',
+		    fileType: 'image',
+		    genre: 'Pop'
+		  },
+		  {
+		    name: 'A Head Full Of Dreams',
+		    artist: 'Coldplay',
+		    price: 25000,
+		    genre: 'Rock'
+		  }
+		];
+}
+
+const fileGrid =  new tui.Grid({
+
+	el : document.getElementById('fileGrid'),
+	scrollX : true,
+	scrollY : true,
+	bodyHeight : window.innerHeight-720,
+	rowHeight : 30,
+	editingEvent: 'click',
+	rowHeaders: [ {
+		type:'checkbox',},'rowNum'],
+	header : {
+		height: 40,
+		complexColumns: []
+	},
+	columns : [
+		{
+			header : '정렬', name  : 'sortBtn',
+			width  : '30',   align : 'center',
+		},
+		{
+			header : '파일명', name  : 'fileName',
+			width  : '350',   align : 'left',
+		},
+		{
+			header : '파일크기(MB)', name  : 'fileSize',
+			width  : '50',        align : 'right',
+		},
+		{
+			header : '보기', name  : 'viewBtn',
+			width  : '30',    align: 'center',
+		},
+		{
+			header : '다운로드', name  : 'downBtn',
+			width  : '30',    align: 'center',
+		},
+		{
+			header : '삭제', name  : 'delBtn',
+			width  : '30',    align: 'center',
+		},
+	],
+	columnOptions : {
+		resizable : true
+	},
+});
+
+tui.Grid.applyTheme('striped', {
+	cell: {
+		header: {
+			 background : '#f2e5d7'
+        },
+        focused: {
+        	background : '#f2e5d7'
+        },
+
+      },
+   row: {
+        hover: {
+          background: '#ccc'
+        },
+        dummy: {
+          background: '#ccc'
+        }
+
+    }
+});
+
+
+
 
 const F = {
 	fileUpload : function(){
@@ -71,6 +164,8 @@ $('#file').on('click change','.change, .click',function(e){
 		}
 	}
 });
+
+
 
 
 const fileUpload = () => {
@@ -150,4 +245,34 @@ const fileSizeDown = function(data){
 	}
 
 </script>
+<style>
+
+	/*공통*/
+	.tui-grid-cell-header {
+		background-color: #f2e5d7;
+	}
+
+	.wrap{
+			width:50% !important;
+		}
+
+	/* PC */
+	@media all and (min-width:1024px) {
+	}
+
+	/* Tab */
+	@media screen and (max-width:1020px) {
+
+	}
+
+	/* Mobile  */
+	@media screen and (max-width:767px) {
+		.wrap{
+			width:100% !important;
+		}
+
+	}
+
+
+</style>
 </html>
