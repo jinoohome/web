@@ -14,6 +14,8 @@
 <script src="/js/jquery-3.6.3.min.js"></script>
 <link href="https://uicdn.toast.com/grid/latest/tui-grid.css" rel="stylesheet"/>
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
 
 </head>
 <body>
@@ -36,14 +38,17 @@
 
 			<section  class="filesWrap wrap"   style=" width:50%">
 				<div class="d-flex justify-content-end my-2">
-					<div>
-						<label for="fileUpload" class="btn btn-secondary p-0 py-1 px-2 me-3" style="">파일 업로드</label>
+					<div class="w-100 mx-2">
+						<label for="fileUpload" class="btn btn-secondary p-0 py-1 px-2 me-3 w-100" style="">사진&영상 추가하기</label>
 						<input  type="file" name="files" multiple="multiple"  id="fileUpload"  class="d-none fileUpload change" />
 					</div>
 				</div>
 
 				<!-- 드래그인 드래그  -->
 				<div>
+					<div>
+						<div class="dropzone d-none"></div>
+					</div>
 
 				</div>
 				<!-- 그리드 추가  -->
@@ -146,9 +151,6 @@ tui.Grid.applyTheme('striped', {
     }
 });
 
-
-
-
 const F = {
 	fileUpload : function(){
 		fileUpload();
@@ -165,7 +167,9 @@ $('#file').on('click change','.change, .click',function(e){
 	}
 });
 
+//$("div.dropzone").dropzone({
 
+//});
 
 
 const fileUpload = () => {
