@@ -12,6 +12,7 @@ spring:
   h2:
     console:
       enabled: true
+
       
 #  datasource:
 #    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -38,12 +39,17 @@ server:
       force : true
 ##  port: 8081
 #
+
+
 #pagehelper:
 # helper-dialect: sqlserver
 # reasonable: true
 # support-methods-arguments: true
 #
 
+tus.upload:
+  dir: /home/shane/Downloads
+  expiration: 86400000
 
 
 

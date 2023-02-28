@@ -1,10 +1,12 @@
 package com.example.web.controller;
 
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,9 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.tika.Tika;
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,13 +32,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
+import me.desair.tus.server.TusFileUploadService;
+import me.desair.tus.server.exception.TusException;
+import me.desair.tus.server.upload.UploadInfo;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 
+@Slf4j
 @Controller
 public class FileController {
+
+    private TusFileUploadService tusFileUploadService;
+
 
 	@GetMapping("/file")
 	public String login() throws Exception {
@@ -65,6 +77,7 @@ public class FileController {
 
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		for(MultipartFile file : fileList) {
+			System.out.println(file.getOriginalFilename());
 			String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 			String yymmdd = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
@@ -111,6 +124,38 @@ public class FileController {
 
 		return list;
 	}
+
+
+	@PostMapping("/uploadTui")
+	@ResponseBody
+	public List<Map<String, Object>> uploadTui(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
+		 try {
+	            // Process a tus upload request
+	            tusFileUploadService.process(request, response);
+
+	            // Get upload information
+	            UploadInfo uploadInfo = tusFileUploadService.getUploadInfo(request.getRequestURI());
+
+	            if (uploadInfo != null && !uploadInfo.isUploadInProgress()) {
+	                // Progress status is successful: Create file
+	                createFile(tusFileUploadService.getUploadedBytes(request.getRequestURI()), uploadInfo.getFileName());
+
+	                // Delete an upload associated with the given upload url
+	                tusFileUploadService.deleteUpload(request.getRequestURI());
+	            }
+	        } catch (IOException | TusException e) {
+	            log.error("exception was occurred. message={}", e.getMessage(), e);
+
+	            throw new RuntimeException(e);
+	        }
+
+		return null;
+	}
+
+   private void createFile(InputStream is, String filename) throws IOException {
+        File file = new File("dest/", filename);
+        FileUtils.copyInputStreamToFile(is, file);
+    }
 
 	@PostMapping("/fileSizeDown")
 	public @ResponseBody List<Map<String, Object>> fileSizeDown(MultipartHttpServletRequest  request, HttpSession session) throws Exception {
@@ -238,7 +283,7 @@ public class FileController {
 			progressMap.put("progress", "80");
 //			rpService.fspRp002U04(progressMap);
 
-			// ¿À¶óÅ¬¼­¹ö °èÁ¤¼³Á¤Áß #2
+			// ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ #2
 //			cmService.saveFileServer2(renamePath);
 
 			progressMap.put("progress", "100");
