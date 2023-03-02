@@ -12,22 +12,26 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tika.Tika;
 import org.apache.commons.io.FileUtils;
+import org.apache.tika.Tika;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -45,12 +49,12 @@ import net.bramp.ffmpeg.builder.FFmpegBuilder;
 @Controller
 public class FileController {
 
-    private TusFileUploadService tusFileUploadService;
+ //   private TusFileUploadService tusFileUploadService;
 
 
 	@GetMapping("/file")
 	public String login() throws Exception {
-		return "file/file";
+		return "file/uppy";
 	}
 
 	@PostMapping("/upload")
@@ -128,26 +132,15 @@ public class FileController {
 
 	@PostMapping("/uploadTui")
 	@ResponseBody
-	public List<Map<String, Object>> uploadTui(MultipartHttpServletRequest request, HttpServletResponse response) throws Exception {
-		 try {
-	            // Process a tus upload request
-	            tusFileUploadService.process(request, response);
+	public List<Map<String, Object>> uploadTui(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-	            // Get upload information
-	            UploadInfo uploadInfo = tusFileUploadService.getUploadInfo(request.getRequestURI());
-
-	            if (uploadInfo != null && !uploadInfo.isUploadInProgress()) {
-	                // Progress status is successful: Create file
-	                createFile(tusFileUploadService.getUploadedBytes(request.getRequestURI()), uploadInfo.getFileName());
-
-	                // Delete an upload associated with the given upload url
-	                tusFileUploadService.deleteUpload(request.getRequestURI());
-	            }
-	        } catch (IOException | TusException e) {
-	            log.error("exception was occurred. message={}", e.getMessage(), e);
-
-	            throw new RuntimeException(e);
-	        }
+		Enumeration params = request.getParameterNames();
+		System.out.println("----------------------------");
+		while (params.hasMoreElements()){
+		    String name = (String)params.nextElement();
+		    System.out.println(name + " : " +request.getParameter(name));
+		}
+		System.out.println("----------------------------");
 
 		return null;
 	}
@@ -156,6 +149,7 @@ public class FileController {
         File file = new File("dest/", filename);
         FileUtils.copyInputStreamToFile(is, file);
     }
+
 
 	@PostMapping("/fileSizeDown")
 	public @ResponseBody List<Map<String, Object>> fileSizeDown(MultipartHttpServletRequest  request, HttpSession session) throws Exception {
