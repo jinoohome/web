@@ -1,8 +1,6 @@
 package com.example.web.controller;
 
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +14,7 @@ import com.example.web.sevice.FileUploadService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.desair.tus.server.TusFileUploadService;
 
 /**
  * 참고: https://qiita.com/Amtkxa/items/6a605209bcc6eb477ec0

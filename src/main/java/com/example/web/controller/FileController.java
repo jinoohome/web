@@ -162,7 +162,6 @@ public class FileController {
 		map.put("files", request.getFiles("files"));
 
 		List<MultipartFile> fileList  = (List<MultipartFile>) map.get("files");
-		System.out.println(request.getParameter("data"));
 
 		JSONParser parser = new JSONParser();
 		JSONArray values = (JSONArray)parser.parse(request.getParameter("data"));
